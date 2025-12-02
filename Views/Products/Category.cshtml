@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SimpleShop.Models.Product>
+@{
+    ViewData["Title"] = "Витрина";
+}
+
+<h2>Витрина</h2>
+
+<p>
+    <a asp-controller="Home" asp-action="Index">Главная</a> |
+    <a asp-controller="Cart" asp-action="Index">Корзина</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr><th>Название</th><th>Категория</th><th>Цена</th><th>Количество</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach(var p in Model)
+    {
+        <tr>
+            <td>@p.Name</td>
+            <td>@p.Category?.Name</td>
+            <td>@p.Price.ToString("C")</td>
+            <td>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline">
+                    <input type="hidden" name="productId" value="@p.Id" />
+                    <input type="number" name="qty" value="1" min="1" max="@p.Stock" />
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </td>
+            <td><a asp-action="Details" asp-route-id="@p.Id">Подробнее</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

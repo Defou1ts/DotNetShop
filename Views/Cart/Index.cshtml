@@ -1,0 +1,61 @@
+﻿@model List<SimpleShop.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<h2>Корзина</h2>
+
+@if (TempData["OrderSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["OrderSuccess"]</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <p>Корзина пуста. <a asp-controller="Products" asp-action="Category">Перейти в витрину</a></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Кол-во</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>
+                        <!-- Отдельная форма для обновления количества (не вложена в другую форму) -->
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" style="display:inline">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" max="100" class="form-control" style="width:100px;display:inline-block" />
+                            <button type="submit" class="btn btn-sm btn-secondary">Обновить</button>
+                        </form>
+                    </td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        <!-- Отдельная форма для удаления -->
+                        <form asp-controller="Cart" asp-action="Remove" method="post" style="display:inline">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button class="btn btn-sm btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Итого:</strong> @Model.Sum(i => i.Total).ToString("C")</p>
+
+    <!-- Кнопка перейти к оформлению (GET) -->
+    <a asp-controller="Cart" asp-action="Checkout" class="btn btn-success">Оформить заказ</a>
+}

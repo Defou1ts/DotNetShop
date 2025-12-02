@@ -1,0 +1,116 @@
+@model SimpleShop.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "Оформление заказа";
+}
+
+<h2>Оформление заказа</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Checkout" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label"></label>
+                <textarea asp-for="Address" class="form-control"></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DeliveryMethod" class="form-label"></label>
+                <select asp-for="DeliveryMethod" class="form-select">
+                    <option value="">-- выберите способ доставки --</option>
+                    <option>Курьер</option>
+                    <option>Самовывоз</option>
+                    <option>Почта</option>
+                </select>
+                <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@Html.DisplayNameFor(m => m.PaymentMethod)</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="Карта" id="pmCard" />
+                    <label class="form-check-label" for="pmCard">Оплата картой</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="Наличные" id="pmCash" />
+                    <label class="form-check-label" for="pmCash">Наличные курьеру</label>
+                </div>
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="SubscribeToNews" class="form-check-input" />
+                <label asp-for="SubscribeToNews" class="form-check-label"></label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Comment" class="form-label"></label>
+                <textarea asp-for="Comment" class="form-control"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Отправить заказ</button>
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-secondary">Назад в корзину</a>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Ваш заказ</h3>
+        @if (Model.Items == null || !Model.Items.Any())
+        {
+            <p>Ваша корзина пуста.</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Кол-во</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.UnitPrice.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Total.ToString("C")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <p><strong>Итого: </strong>@Model.Items.Sum(i => i.Total).ToString("C")</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
