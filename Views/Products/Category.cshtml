@@ -1,35 +1,96 @@
-﻿@model IEnumerable<SimpleShop.Models.Product>
+﻿@model SimpleShop.Models.CatalogViewModel
 @{
     ViewData["Title"] = "Витрина";
+    var placeholderImage = Url.Content("~/images/product-placeholder.svg");
 }
 
-<h2>Витрина</h2>
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="mb-0">Витрина</h2>
+        <p class="text-muted mb-0">Разделов: @Model.TotalCategories · Товаров: @Model.Products.Count()</p>
+    </div>
+    <a class="btn btn-outline-secondary" asp-controller="Cart" asp-action="Index">
+        Перейти в корзину
+    </a>
+</div>
 
-<p>
-    <a asp-controller="Home" asp-action="Index">Главная</a> |
-    <a asp-controller="Cart" asp-action="Index">Корзина</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr><th>Название</th><th>Категория</th><th>Цена</th><th>Количество</th><th></th></tr>
-    </thead>
-    <tbody>
-    @foreach(var p in Model)
-    {
-        <tr>
-            <td>@p.Name</td>
-            <td>@p.Category?.Name</td>
-            <td>@p.Price.ToString("C")</td>
-            <td>
-                <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display:inline">
-                    <input type="hidden" name="productId" value="@p.Id" />
-                    <input type="number" name="qty" value="1" min="1" max="@p.Stock" />
-                    <button type="submit" class="btn btn-primary">Добавить</button>
+<div class="row">
+    <div class="col-lg-3 mb-4">
+        <div class="card shadow-sm sticky-lg-top catalog-sections">
+            <div class="card-header fw-semibold">
+                Разделы
+            </div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action @(Model.SelectedCategoryId == null ? "active" : string.Empty)"
+                   asp-action="Category"
+                   asp-route-id=""
+                   asp-route-searchTerm="">
+                    Все товары
+                </a>
+                @foreach (var category in Model.Categories)
+                {
+                    <a class="list-group-item list-group-item-action @(Model.SelectedCategoryId == category.Id ? "active" : string.Empty)"
+                       asp-action="Category"
+                       asp-route-id="@category.Id"
+                       asp-route-searchTerm="@Model.SearchTerm">
+                        @category.Name
+                    </a>
+                }
+            </div>
+            <div class="card-body">
+                <p class="small text-muted mb-1">Нужно быстро найти товар?</p>
+                <form asp-action="Category" method="get" class="input-group input-group-sm">
+                    <input type="hidden" name="id" value="@Model.SelectedCategoryId" />
+                    <input type="search" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Поиск по названию" />
+                    <button class="btn btn-primary" type="submit">Найти</button>
                 </form>
-            </td>
-            <td><a asp-action="Details" asp-route-id="@p.Id">Подробнее</a></td>
-        </tr>
-    }
-    </tbody>
-</table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        @if (!Model.Products.Any())
+        {
+            <div class="alert alert-info">
+                По выбранным критериям ничего не найдено. Попробуйте сбросить фильтр или изменить поисковый запрос.
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm product-card">
+                            @if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+                            {
+                                var imageUrl = string.IsNullOrWhiteSpace(product.ImageUrl) ? placeholderImage : product.ImageUrl;
+                                <img src="@imageUrl" class="card-img-top" alt="@product.Name" loading="lazy" />
+                            }
+                            <div class="card-body d-flex flex-column">
+                                <p class="text-muted mb-1">@product.Category?.Name</p>
+                                <h5 class="card-title">@product.Name</h5>
+                                <p class="card-text flex-grow-1">@product.ShortDescription</p>
+                                <p class="fw-bold fs-5">@product.Price.ToString("C")</p>
+                                <p class="small @(product.Stock > 0 ? "text-success" : "text-danger")">
+                                    @(product.Stock > 0 ? $"В наличии: {product.Stock}" : "Нет в наличии")
+                                </p>
+                                <div class="d-flex gap-2 align-items-center flex-wrap">
+                                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-flex gap-2 align-items-center" style="flex:1 1 auto;">
+                                        <input type="hidden" name="productId" value="@product.Id" />
+                                        <input type="number" name="qty" value="1" min="1" max="@product.Stock" class="form-control" style="max-width:100px" @(product.Stock <= 0 ? "disabled" : string.Empty) />
+                                        <button type="submit" class="btn btn-primary" @(product.Stock <= 0 ? "disabled" : string.Empty)>
+                                            В корзину
+                                        </button>
+                                    </form>
+                                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-secondary">
+                                        Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

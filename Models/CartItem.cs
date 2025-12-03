@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleShop.Models
 {
+    /// <summary>
+    /// Лёгкий снимок товара, хранящийся в корзине пользователя.
+    /// </summary>
     public class CartItem
     {
         [Key]

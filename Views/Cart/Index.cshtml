@@ -2,13 +2,14 @@
 
 @{
     ViewData["Title"] = "Корзина";
+    var total = ViewBag.CartTotal as decimal? ?? 0m;
 }
 
 <h2>Корзина</h2>
 
-@if (TempData["OrderSuccess"] != null)
+@if (TempData["CartWarning"] != null)
 {
-    <div class="alert alert-success">@TempData["OrderSuccess"]</div>
+    <div class="alert alert-warning">@TempData["CartWarning"]</div>
 }
 
 @if (Model == null || !Model.Any())
@@ -54,7 +55,7 @@ else
         </tbody>
     </table>
 
-    <p><strong>Итого:</strong> @Model.Sum(i => i.Total).ToString("C")</p>
+    <p><strong>Итого:</strong> @total.ToString("C")</p>
 
     <!-- Кнопка перейти к оформлению (GET) -->
     <a asp-controller="Cart" asp-action="Checkout" class="btn btn-success">Оформить заказ</a>

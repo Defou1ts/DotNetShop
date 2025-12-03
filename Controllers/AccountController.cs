@@ -5,6 +5,9 @@ using SimpleShop.Models;
 
 namespace SimpleShop.Controllers
 {
+    /// <summary>
+    /// Минимальная оболочка над ASP.NET Core Identity для регистрации и входа пользователей.
+    /// </summary>
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userMgr;

@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SimpleShop.Data;
 using SimpleShop.Models;
+using SimpleShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DB
+// База данных
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySQL(connectionString));
 
 
-// Identity
+// Подсистема Identity (регистрация/вход пользователей)
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
@@ -24,7 +27,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Account/Logout";
 });
 
-// MVC + авторизация по умолчанию
+// MVC + настройка политики авторизации по умолчанию
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthorization(options =>
 {
@@ -34,12 +37,14 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
-// Caching
+// Кэширование
 builder.Services.AddMemoryCache();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(EmailSettings.SectionName));
+builder.Services.AddScoped<IOrderNotificationService, EmailOrderNotificationService>();
 
 var app = builder.Build();
 
-// Seed DB (sync startup init)
+// Инициализация и заполнение БД при старте приложения
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

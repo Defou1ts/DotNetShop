@@ -3,10 +3,15 @@ using System.ComponentModel.DataAnnotations;
 namespace SimpleShop.Models
 {
     /// <summary>
-    /// Собирает данные, вводимые пользователем при оформлении заказа, и снимок позиций корзины.
+    /// Хранит оформленный заказ с данными пользователя и списком позиций заказа.
     /// </summary>
-    public class OrderViewModel
+    public class Order
     {
+        public int Id { get; set; }
+
+        [Required]
+        public string UserId { get; set; } = string.Empty;
+
         [Required, StringLength(100)]
         public string FullName { get; set; } = string.Empty;
 
@@ -19,22 +24,22 @@ namespace SimpleShop.Models
         [Required, Phone]
         public string Phone { get; set; } = string.Empty;
 
-        [Required]
-        [Display(Name = "Способ доставки")]
+        [Required, StringLength(50)]
         public string DeliveryMethod { get; set; } = string.Empty;
 
-        [Required]
-        [Display(Name = "Способ оплаты")]
+        [Required, StringLength(50)]
         public string PaymentMethod { get; set; } = string.Empty;
 
-        [Display(Name = "Подписаться на новости")]
         public bool SubscribeToNews { get; set; }
 
-        [Display(Name = "Комментарий к заказу")]
         [StringLength(500)]
         public string? Comment { get; set; }
 
-        public List<CartItem> Items { get; set; } = new();
+        public decimal TotalAmount { get; set; }
+
+        public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+
+        public List<OrderItem> Items { get; set; } = new();
     }
 }
 

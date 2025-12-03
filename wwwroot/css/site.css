@@ -8,7 +8,11 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -19,4 +23,36 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.hero {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 140, 251, 0.08),
+    rgba(37, 140, 251, 0.02)
+  );
+}
+
+.hero-stats ul li {
+  margin-bottom: 0.5rem;
+}
+
+.product-card img {
+  object-fit: cover;
+  height: 200px;
+}
+
+.product-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-sections {
+  top: 1rem;
+}
+
+@media (max-width: 991.98px) {
+  .catalog-sections {
+    position: static;
+  }
 }

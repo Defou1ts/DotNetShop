@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e3eefc" />
+      <stop offset="100%" stop-color="#c9dcf8" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#grad)" />
+  <g fill="#6e7fa0" font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+    <text x="200" y="150" font-size="42" font-weight="600">SimpleShop</text>
+    <text x="200" y="190" font-size="20">Изображение товара</text>
+  </g>
+</svg>
+

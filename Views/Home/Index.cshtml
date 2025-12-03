@@ -2,27 +2,60 @@
     ViewData["Title"] = "Главная";
 }
 
-<div class="jumbotron">
-    <h1 class="display-4">Добро пожаловать в SimpleShop</h1>
-    <hr class="my-4" />
-    <p>
-        Вы можете перейти к витрине товаров, добавить товары в корзину, оформить заказ и выполнить вход на сайт.
-    </p>
-    <p>
-        <a class="btn btn-primary btn-lg" asp-controller="Products" asp-action="Category">Перейти к витрине</a>
-        <a class="btn btn-outline-secondary btn-lg" asp-controller="Cart" asp-action="Index">Открыть корзину</a>
-    </p>
-</div>
+<section class="hero bg-light rounded-4 p-4 p-md-5 mb-5 shadow-sm">
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <p class="text-uppercase text-muted fw-semibold mb-2">Онлайн-магазин</p>
+            <h1 class="display-5 fw-bold">Добро пожаловать в SimpleShop</h1>
+            <p class="lead">Просматривайте не менее четырёх разделов каталога, изучайте карточки товаров, добавляйте позиции в корзину и оформляйте заказы с автоматическим подсчётом суммы.</p>
+            <div class="d-flex flex-wrap gap-3">
+                <a class="btn btn-primary btn-lg" asp-controller="Products" asp-action="Category">Перейти к витрине</a>
+                <a class="btn btn-outline-secondary btn-lg" asp-controller="Cart" asp-action="Index">Открыть корзину</a>
+                <a class="btn btn-link" asp-controller="Home" asp-action="Manual">Руководство</a>
+            </div>
+        </div>
+        <div class="col-md-5 text-center mt-4 mt-md-0">
+            <div class="hero-stats shadow-sm rounded-4 p-4 bg-white">
+                <h2 class="h5 text-muted">Что реализовано</h2>
+                <ul class="list-unstyled text-start mb-0">
+                    <li>✔️ Категории и фильтры витрины</li>
+                    <li>✔️ 10+ карточек с изображениями</li>
+                    <li>✔️ Поиск по товарам</li>
+                    <li>✔️ Оформление заказа и email-уведомления</li>
+                    <li>✔️ Автоуменьшение остатка на складе</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section id="help" class="mt-4">
-    <h2>Краткая инструкция</h2>
-    <ol>
-        <li>Зарегистрируйтесь или войдите в систему через меню «Вход/Регистрация».</li>
-        <li>Откройте раздел «Витрина» и выберите интересующие товары.</li>
-        <li>Добавьте товары в корзину, указав желаемое количество.</li>
-        <li>Перейдите в корзину, при необходимости скорректируйте количество или удалите позиции.</li>
-        <li>Нажмите «Оформить заказ» и заполните форму оформления.</li>
-        <li>После успешной отправки формы вы увидите итоговую сумму заказа.</li>
-    </ol>
-    <p>Более подробная информация представлена в файле помощи в корне проекта.</p>
+    <h2>Как пользоваться магазином</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5">Выбор товара</h3>
+                    <p>Перейдите в витрину, используйте меню разделов или форму поиска по названию и ключевым словам.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5">Корзина</h3>
+                    <p>Добавляйте любое количество товара в пределах наличия. В корзине можно менять количество и удалять позиции.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5">Заказ</h3>
+                    <p>Заполните форму, получите краткую сводку с суммой и составом заказа, продублированную по email.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="mt-4">Полные инструкции и ответы на вопросы размещены на странице <a asp-controller="Home" asp-action="Manual">«Руководство пользователя»</a>.</p>
 </section>

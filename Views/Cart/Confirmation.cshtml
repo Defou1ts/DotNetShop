@@ -1,0 +1,68 @@
+@model SimpleShop.Models.Order
+@{
+    ViewData["Title"] = "Заказ оформлен";
+}
+
+<div class="alert alert-success">
+    <h2 class="h4 mb-2">Спасибо, @Model.FullName!</h2>
+    <p class="mb-0">
+        Вы заказали @Model.Items.Count товар(ов) на сумму <strong>@Model.TotalAmount.ToString("C")</strong>.
+        Подтверждение отправлено на <strong>@Model.Email</strong>.
+    </p>
+</div>
+
+<div class="row gy-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header fw-semibold">
+                Состав заказа №@Model.Id
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Товар</th>
+                            <th>Кол-во</th>
+                            <th>Цена</th>
+                            <th>Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.UnitPrice.ToString("C")</td>
+                                <td>@(item.UnitPrice * item.Quantity)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-end">
+                <strong>Итого: @Model.TotalAmount.ToString("C")</strong>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-header fw-semibold">Детали доставки</div>
+            <div class="card-body">
+                <p class="mb-1"><strong>Получатель:</strong><br />@Model.FullName</p>
+                <p class="mb-1"><strong>Адрес:</strong><br />@Model.Address</p>
+                <p class="mb-1"><strong>Телефон:</strong><br />@Model.Phone</p>
+                <p class="mb-1"><strong>Доставка:</strong><br />@Model.DeliveryMethod</p>
+                <p class="mb-1"><strong>Оплата:</strong><br />@Model.PaymentMethod</p>
+                @if (!string.IsNullOrWhiteSpace(Model.Comment))
+                {
+                    <p class="mb-0"><strong>Комментарий:</strong><br />@Model.Comment</p>
+                }
+            </div>
+        </div>
+        <a asp-controller="Products" asp-action="Category" class="btn btn-primary w-100 mt-3">
+            Вернуться к покупкам
+        </a>
+    </div>
+</div>
+
